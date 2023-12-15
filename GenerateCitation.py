@@ -8,6 +8,9 @@ from MatchStyle import match_style
 from openai import OpenAI
 
 def GenerateCitation(input_text, citation_style = "APA style"):
+    
+    messages = []
+
     # Client initialization or configuration goes here
     client = OpenAI(api_key="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")
     print("client initialized")
@@ -16,6 +19,8 @@ def GenerateCitation(input_text, citation_style = "APA style"):
     step_1_out = analyze_text_for_citations(input_text, client, citation_style=citation_style)
     print("step 1 output:")
     print(step_1_out)
+    
+    messages.append("Step 1 completed: " + str(step_1_out))
 
     # Step 2: Generate arXiv search queries
     queries_arxiv = generate_arxiv_search_queries(step_1_out, client)
@@ -32,4 +37,4 @@ def GenerateCitation(input_text, citation_style = "APA style"):
     # Step 5: Match style
     response = match_style(client, input_text, step_1_out, citations, citation_style=citation_style)
 
-    return response
+    return response, messages
